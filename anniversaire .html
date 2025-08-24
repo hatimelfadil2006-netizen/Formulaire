@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulaire</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ffdee9, #b5fffc);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .card {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0px 10px 30px rgba(0,0,0,0.15);
+      text-align: center;
+      max-width: 420px;
+      width: 100%;
+      transition: 0.5s;
+    }
+    .hidden {
+      display: none;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    input {
+      width: 90%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      outline: none;
+      font-size: 16px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 25px;
+      background: #ff6f61;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #e63946;
+    }
+    h1 {
+      font-size: 2.2em;
+      color: #e63946;
+    }
+    p {
+      font-size: 1.1em;
+      color: #444;
+      margin-top: 15px;
+    }
+    #compte {
+      font-size: 2em;
+      font-weight: bold;
+      color: #ff6f61;
+      margin-top: 20px;
+    }
+    /* Confettis */
+    .confetti {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      background-color: red;
+      top: -10px;
+      border-radius: 50%;
+      animation: fall linear forwards;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(720deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- FORMULAIRE -->
+  <div class="card" id="formulaire">
+    <h2>Veuillez remplir ce formulaire</h2>
+    <input type="number" id="age" placeholder="Votre âge" required><br>
+    <input type="text" id="nom" placeholder="Votre nom de famille" required><br>
+    <button onclick="startCountdown()">Valider</button>
+  </div>
+
+  <!-- COMPTE À REBOURS -->
+  <div class="card hidden" id="countdown">
+    <h2>Prépare-toi pour une surprise 🎁</h2>
+    <div id="compte">5</div>
+  </div>
+
+  <!-- SURPRISE -->
+  <div class="card hidden" id="surprise">
+    <h1>🎉 Joyeux Anniversaire Atika Dainane 🎂🎈</h1>
+    <p>Que cette nouvelle année de ta vie t’apporte santé, réussite et beaucoup de bonheur. 🥳💖</p>
+    <!-- Musique -->
+    <audio id="musique" src="anniversaire.mp3"></audio>
+  </div>
+
+  <script>
+    function startCountdown() {
+      let age = document.getElementById("age").value.trim();
+      let nom = document.getElementById("nom").value.trim();
+
+      if(age === "" || nom === ""){
+        alert("Merci de remplir tous les champs !");
+        return;
+      }
+
+      // cacher formulaire
+      document.getElementById("formulaire").classList.add("hidden");
+
+      // afficher compte à rebours
+      document.getElementById("countdown").classList.remove("hidden");
+
+      let temps = 5;
+      let interval = setInterval(() => {
+        document.getElementById("compte").innerText = temps;
+        temps--;
+
+        if(temps < 0) {
+          clearInterval(interval);
+          lancerSurprise();
+        }
+      }, 1000);
+    }
+
+    function lancerSurprise() {
+      // cacher countdown
+      document.getElementById("countdown").classList.add("hidden");
+
+      // afficher surprise
+      document.getElementById("surprise").classList.remove("hidden");
+
+      // jouer musique
+      let musique = document.getElementById("musique");
+      musique.play();
+
+      // confettis
+      for (let i = 0; i < 80; i++) {
+        let conf = document.createElement("div");
+        conf.className = "confetti";
+        conf.style.left = Math.random() * window.innerWidth + "px";
+        conf.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 50%)`;
+        conf.style.animationDuration = (2 + Math.random() * 3) + "s";
+        document.body.appendChild(conf);
+        setTimeout(()=> conf.remove(), 5000);
+      }
+    }
+  </script>
+</body>
+</html>
